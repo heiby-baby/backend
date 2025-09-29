@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +15,20 @@ def save_data():
             f.write(text + '\n')
         
         return jsonify({'message': 'Данные сохранены'}), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/load', methods=['GET'])
+def load_data():
+    try:
+        if not os.path.exists('data.txt'):
+            return jsonify({'content': 'Файл пуст'})
+        
+        with open('data.txt', 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        return jsonify({'content': content})
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
