@@ -11,7 +11,7 @@ def save_data():
         data = request.get_json()
         text = data.get('data', '')
         
-        with open('data.txt', 'a', encoding='utf-8') as f:
+        with open('/data/data.txt', 'a', encoding='utf-8') as f:
             f.write(text + '\n')
         
         return jsonify({'message': 'Данные сохранены'}), 200
@@ -22,10 +22,10 @@ def save_data():
 @app.route('/api/load', methods=['GET'])
 def load_data():
     try:
-        if not os.path.exists('data.txt'):
+        if not os.path.exists('/data/data.txt'):
             return jsonify({'content': 'Файл пуст'})
         
-        with open('data.txt', 'r', encoding='utf-8') as f:
+        with open('/data/data.txt', 'r', encoding='utf-8') as f:
             content = f.read()
         
         return jsonify({'content': content})
@@ -34,4 +34,4 @@ def load_data():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
